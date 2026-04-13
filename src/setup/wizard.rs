@@ -30,6 +30,8 @@ struct Colors {
     magenta: &'static str,
 }
 
+const BORDER: char = '═';
+
 macro_rules! cprintln {
     ($color:expr, $fmt:expr) => {{
         println!("{}{}{}", $color, $fmt, C.reset);
@@ -69,7 +71,7 @@ fn prompt_default(prompt_text: &str, default: &str) -> String {
 }
 
 fn prompt_password(prompt_text: &str) -> String {
-    print!("{}{}: ", C.yellow, prompt_text,);
+    print!("{}{}: ", C.yellow, prompt_text);
     io::stdout().flush().ok();
     rpassword::read_password().unwrap_or_default()
 }
@@ -152,7 +154,7 @@ fn print_box(lines: &[&str]) {
         .unwrap_or(60);
     let width = width.clamp(60, 76);
     println!();
-    cprintln!(C.cyan, "{}", "╔".to_string() + &"═".repeat(width + 2) + "╗");
+    cprintln!(C.cyan, "{}", "╔".to_string() + &BORDER.to_string().repeat(width + 2) + "╗");
     for line in lines {
         let padded = format!(" {:<width$} ", format!("{}", line), width = width);
         print!("{}", C.cyan);
@@ -161,7 +163,7 @@ fn print_box(lines: &[&str]) {
         print!("{}", C.cyan);
         println!("║");
     }
-    cprintln!(C.cyan, "{}", "╚".to_string() + &"═".repeat(width + 2) + "╝");
+    cprintln!(C.cyan, "{}", "╚".to_string() + &BORDER.to_string().repeat(width + 2) + "╝");
     println!();
 }
 
