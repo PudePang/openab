@@ -283,7 +283,9 @@ impl EventHandler for Handler {
                         });
                     }
                 } else {
-                    debug!(filename = %attachment.filename, "skipping audio attachment (STT disabled)");
+                    tracing::warn!(filename = %attachment.filename, "skipping audio attachment (STT disabled)");
+                    let msg_ref = discord_msg_ref(&msg);
+                    let _ = adapter.add_reaction(&msg_ref, "🎤").await;
                 }
             } else if let Some(block) = media::download_and_encode_image(
                 &attachment.url,
